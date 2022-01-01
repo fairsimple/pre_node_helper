@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>PRE Node Setup Helper</title>
+<style>
+  body {
+    padding: 25px;
+    background-color: white;
+    color: black;
+    font-size: 25px;
+  }
+  .dark-mode {
+    background-color: black;
+    color: white;
+  }
+  .light-mode {
+    background-color: white;
+    color: black;
+  }
+  a[href] {
+    color: #1e8ad6;
+  }
+
+  a[href]:hover {
+    color: #3ba0e6;
+  }
+  input {
+    font-size: 20px;
+  }
+  button {
+    font-size:20px;
+    padding: 10px;
+    margin: 20px;
+    color: white;
+    background-color: blue;
+  }
+ 
+</style>
+<script type="text/javascript">
+function getcmd() {
+  i = document.getElementById("rc");
+  o = document.getElementById("cmd");
+  s1 = 'sudo docker run -dt --name presearch-node --restart=unless-stopped -v presearch-node-storage:/app/node -e REGISTRATION_CODE=';
+  s2 = ' presearch/node';
+  o.innerHTML = s1+i.value+s2;
+ }
+function cpcmd() {
+  c = document.getElementById("cmd").innerHTML;
+  const elem = document.createElement('textarea');
+  elem.value = c;
+  document.body.appendChild(elem);
+  elem.select();
+  document.execCommand('copy');
+  document.body.removeChild(elem);
+  setTimeout(function() { alert("Copied command: " + c); }, 10);
+}
+</script>
+</head>
+<body class='dark-mode'>
+  <h1>Helper to build your docker command line</h1>
+  <p>Please check <a href='https://docs.presearch.org/nodes/setup' target='_blank'>Preserach help page</a> to setup/install docker. </p>
+  <p>This is page is only to help you to build your command line to launch your node with your node registration code. </p>
+  <p>Please copy your node register from <a href='https://nodes.presearch.org/dashboard' target='_blank'>your node dashboard</a> and paste it below.</p>
+  Node registration code: <input type='text' size='50' id='rc'>
+  <p>Your command line:</p>
+  <p id='cmd' style='background-color: grey'></p>
+  <button onclick="getcmd()">Show command</button><button onclick="getcmd();cpcmd();">Copy command</button>
+</body>
+</html>
