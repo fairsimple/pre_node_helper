@@ -43,9 +43,20 @@ function getcmd() {
   o = document.getElementById("cmd");
   s1 = 'sudo docker run -dt --name presearch-node --restart=unless-stopped -v presearch-node-storage:/app/node -e REGISTRATION_CODE=';
   s2 = ' presearch/node';
-  o.innerHTML = s1+i.value+s2;
- }
+  re = /[0-9A-Fa-f]{32}/g;
+  rc = i.value;
+  if(rc.length!=32) {
+    alert('Registration code length error!');
+  } else if (re.test(rc)) {
+      o.innerHTML = s1+i.value+s2;
+      return true;
+  } else {
+    alert('Registration code should be hexdecimal string!');
+  }
+  return false;
+}
 function cpcmd() {
+  if(!getcmd()) return;
   c = document.getElementById("cmd").innerHTML;
   const elem = document.createElement('textarea');
   elem.value = c;
@@ -55,16 +66,22 @@ function cpcmd() {
   document.body.removeChild(elem);
   setTimeout(function() { alert("Copied command: " + c); }, 10);
 }
+function reset() {
+  document.getElementById('rc').value='';
+  document.getElementById("cmd").innerHTML = '';
+}
 </script>
 </head>
 <body class='dark-mode'>
   <h1>Helper to build your docker command line</h1>
   <p>Please check <a href='https://docs.presearch.org/nodes/setup' target='_blank'>Preserach help page</a> to setup/install docker. </p>
   <p>This is page is only to help you to build your command line to launch your node with your node registration code. </p>
-  <p>Please copy your node register from <a href='https://nodes.presearch.org/dashboard' target='_blank'>your node dashboard</a> and paste it below.</p>
-  Node registration code: <input type='text' size='50' id='rc'>
+  <p>Please copy your node registration code from <a href='https://nodes.presearch.org/dashboard' target='_blank'>your node dashboard</a> and paste it below.</p>
+  Node registration code: <input type='text' size='32' id='rc'>
   <p>Your command line:</p>
   <p id='cmd' style='background-color: grey'></p>
-  <button onclick="getcmd()">Show command</button><button onclick="getcmd();cpcmd();">Copy command</button>
+  <button onclick="getcmd()">Show command</button>
+  <button onclick="cpcmd();">Copy command</button>
+  <button onclick="reset()">Reset all</button>
 </body>
 </html>
